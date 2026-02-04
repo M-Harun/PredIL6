@@ -1,1 +1,80 @@
 # PredIL6
+
+# Introduction
+**PredIL6** is an ensemble machine learning framework for predicting **Interleukin-6 (IL-6)–inducing peptides**. It combines probability outputs from **148 single-feature machine learning and deep learning models** using a **genetic algorithm–based meta-classifier**, achieving high predictive accuracy and robustness.
+The project covers dataset construction, feature encoding, ensemble model training, validation, and performance evaluation using multiple statistical and machine learning metrics.
+
+For a detailed description of the methodology and results, please refer to the following publication:
+"Harun-Or-Roshid, M., Kurata, H. A genetic algorithm-based ensemble model for efficiently identifying interleukin 6 inducing peptides. Scientific Reports 15, 21213 (2025). https://doi.org/10.1038/s41598-025-05491-2."
+
+# Development environment
+ >python 3.8.8   
+ >anaconda 4.11.0  
+ >pandas 1.2.5  
+ >numpy 1.20.3  
+ >lightgbm: 4.1.0  
+ >xgboost: 1.7.6  
+ >sklearn: 1.1.2  
+ >gensim: 4.0.1  
+
+# Execution
+# 1 Setting directories
+Users must download all the directories  
+Users must keep the structure of the directories of the programs  
+
+# 2 Construction of dataset
+Before simulation, users build dataset files for cross validataion and independent test:   
+$sh data_const.sh  
+The file of data_const.sh consists of the following programs  
+
+## 2-1 Programs for removal of peptides including non-standard amino acids and for analysis of peptide sequence length distribution
+Users remove the peptides including non-standard amino acids  
+$python data_stand.py  
+Users can evaluate the peptide sequence length distribution.  
+$python data_analsis_1.py  
+
+## 2-2 Programs for making training and test datasets
+Users prepare the training dataset to conduct 5-fold cross validation.  
+$python train_division_1.py  
+Users adjust the test dataset in the fasta format.  
+$python test_fasta.py  
+  
+# 3 Baselin model construction and meta-classifier construction
+Users train a series of baseline models with the training dataset and then construct a meta-classifier. Furthermore, users test the baseline models and the meta-classifier, evaluate their prediction performance (metrics), and save the metrics.  
+$cd program  
+$sh process.sh  
+The file of process.sh consists of the following programs (3-1, 3-2, 3-3, 3-4).  
+The maximum sequence length can be set to 35.  
+
+## 3-1 Programs for training and testing of the baseline models
+Users train the baseline models with machine learning methods via 5-fold cross validation.  
+$cd program/ml  
+$python ml_train_test_46.py  
+Users train the baseline models with deep learning methods via 5-fold cross validation.  
+$cd program/network  
+$python train_test_86.py  
+
+## 3-2 Program for meta-classifier construction
+Users fuse the probability scores outputted by all the baseline models, and train a meta-classifier by using the fused data. Genetic algorithms are used to determine the weight of each baseline model to optimize the meta-classifier.  
+$cd program  
+$python ml_fusion_GA.py  
+
+## 3-3 Program for evaluation of the baseline models
+Users evaluate the prediction performance (metrics) of the baseline models and meta-classifier. The metrics are saved in the csv file.  
+$cd program  
+$python analysis_622.py  
+
+## 3-4 Programs for output of prediction results
+Users save the csv file of the metrics of the baseline models in the excel format.  
+$cd program  
+$python csv_xlsx_34.py  
+Users save the csv file of the metrics of the meta-classifier in the excel format.  
+$cd program  
+$python csv_xlsx_37.py  
+
+# References on RNA encodings
+https://ilearn.erc.monash.edu/
+
+# History
+from pa3/il6_221 in CERVO, mldl environment
+
